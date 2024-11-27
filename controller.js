@@ -1,7 +1,6 @@
 const fs = require('fs');
 const path = require('path');
 
-// Generate controller for models dynamically
 function generateDynamicController(filePath) {
   const fileContent = fs.readFileSync(filePath, 'utf-8');
   const lines = fileContent.split('\n');
@@ -9,7 +8,6 @@ function generateDynamicController(filePath) {
   let currentModel = null;
   let fields = {};
 
-  // Parse models and fields from schema
   lines.forEach((line) => {
     line = line.trim();
 
@@ -31,10 +29,9 @@ function generateDynamicController(filePath) {
   });
 
   const controllers = models.map((model) => {
-    const lowerCaseModel = model.replace(/_/g, '').toLowerCase(); // Generate a name in camelCase
-    const validationSchemaName = `${lowerCaseModel}Schema`; // Assuming Joi schema files follow a naming convention
+    const lowerCaseModel = model.replace(/_/g, '').toLowerCase();
+    const validationSchemaName = `${lowerCaseModel}Schema`; 
 
-    // Dynamically generate destructured fields and field assignments
     const destructuredFields = fields[model].filter((field) => field !== 'id' && field !== 'project_id').join(', ');
     const dataFields = fields[model]
       .filter((field) => field !== 'id')
@@ -110,8 +107,6 @@ ${controllers.join('\n')}
   console.log('Controller generated and saved to controllers.js');
 }
 
-// Path to your Prisma schema file
 const prismaSchemaPath = path.join(__dirname, 'schema.txt');
 
-// Generate the controller
 generateDynamicController(prismaSchemaPath);
