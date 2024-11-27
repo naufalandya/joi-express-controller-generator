@@ -1,0 +1,18 @@
+enum RiskType {
+    PEMENUHAN_TIMELINE_FINANCIAL_CLOSE
+    INITIAL_DRAWDOWN
+}
+
+model governance_risk_compliance {
+    id        Int      @id @default(autoincrement())
+    year                  Int?      // Tahun, misalnya 2024
+    instruction           String?
+    follow_up             String?
+    value                 Int?
+    created_at            DateTime? @default(now())
+    updated_at            DateTime? @updatedAt 
+
+    project_id             Int?
+    project                projects?  @relation(fields: [project_id], references: [id] , onDelete: NoAction, onUpdate: NoAction)
+    type                   RiskType
+}
